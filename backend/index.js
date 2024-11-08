@@ -19,6 +19,7 @@ app.use("/uploads", express.static("uploads"));
 app.post("/register", authController.register);
 app.post("/login", authController.login);
 
+
 // Routes CRUD pour les produits
 app.get("/products", authMiddleware, productController.getProducts);
 app.post("/products", authMiddleware, upload.single("image"), productController.createProduct); // Include Multer middleware
