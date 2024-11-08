@@ -1,89 +1,89 @@
 /* Login page container */
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f7f7f7;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
-  /* Login heading */
-  .login-heading {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 20px; /* Ensures spacing between the heading and the form */
-    color: #333;
-    text-align: center;
-  }
-  
-  /* Form container */
-  .form-container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  /* Input fields */
-  .input-field {
-    padding: 12px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-  
-  .input-field:focus {
-    border-color: #007bff;
-  }
-  
-  /* Button styles */
-  button {
-    padding: 12px;
-    border-radius: 4px;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  button:focus {
-    outline: none;
-  }
-  
-  /* Primary button */
-  .button {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Register link section */
-  .register-link {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15px; /* Ensures proper spacing between the form and the link */
-  }
-  
-  .register-link p {
-    margin-right: 5px;
-    font-size: 14px;
-  }
-  
-  .register-button {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 100vh !important;
+    background-color: #f7f7f7 !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+}
+
+/* Login heading */
+.login-heading {
+    font-size: 28px !important;
+    font-weight: bold !important;
+    margin-bottom: 20px !important; /* Ensures spacing between the heading and the form */
+    color: #333 !important;
+    text-align: center !important;
+}
+
+/* Form container */
+.form-container {
+    background-color: #fff !important;
+    padding: 30px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    width: 100% !important;
+    max-width: 400px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+}
+
+/* Input fields */
+.input-field {
+    padding: 12px !important;
+    margin: 8px 0 !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    font-size: 16px !important;
+    outline: none !important;
+    transition: border-color 0.3s !important;
+}
+
+.input-field:focus {
+    border-color: #007bff !important;
+}
+
+/* Button styles */
+button {
+    padding: 12px !important;
+    border-radius: 4px !important;
+    border: none !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s !important;
+}
+
+button:focus {
+    outline: none !important;
+}
+
+/* Primary button */
+.button {
+    background-color: #007bff !important;
+    color: white !important;
+}
+
+.button:hover {
+    background-color: #0056b3 !important;
+}
+
+/* Register link section */
+.register-link {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: 15px !important; /* Ensures proper spacing between the form and the link */
+}
+
+.register-link p {
+    margin-right: 5px !important;
+    font-size: 14px !important;
+}
+
+.register-button {
     background-color: #28a745 !important;
     color: white !important;
     padding: 10px 20px !important;
@@ -92,33 +92,32 @@
     font-size: 16px !important;
     cursor: pointer !important;
     transition: background-color 0.3s !important;
-  }
-  
-  .register-button:hover {
+}
+
+.register-button:hover {
     background-color: #218838 !important;
-  }
-  
-  /* Error message style (if needed) */
-  .error-message {
-    color: red;
-    text-align: center;
-    font-size: 14px;
-    margin-top: 10px;
-  }
-  
-  /* Media Queries for responsiveness */
-  @media (max-width: 500px) {
+}
+
+/* Error message style (if needed) */
+.error-message {
+    color: red !important;
+    text-align: center !important;
+    font-size: 14px !important;
+    margin-top: 10px !important;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 500px) {
     .login-heading {
-      font-size: 24px;
+        font-size: 24px !important;
     }
     .form-container {
-      padding: 20px;
+        padding: 20px !important;
     }
     .input-field {
-      font-size: 14px;
+        font-size: 14px !important;
     }
     button {
-      font-size: 14px;
+        font-size: 14px !important;
     }
-  }
-  
+}

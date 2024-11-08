@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 import "./ProductForm.css";
 
 function ProductForm() {
@@ -8,7 +9,6 @@ function ProductForm() {
   const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,7 +42,15 @@ function ProductForm() {
         }
       );
 
-      setSuccess("Produit ajouté avec succès !");
+      // Afficher SweetAlert en cas de succès
+      Swal.fire({
+        title: "Succès!",
+        text: "Produit ajouté avec succès!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+
+      // Réinitialiser les champs du formulaire
       setName("");
       setDescription("");
       setPrice("");
@@ -51,7 +59,6 @@ function ProductForm() {
     } catch (err) {
       console.error("Error adding product:", err.response ? err.response.data : err.message);
       setError("Erreur lors de l'ajout du produit.");
-      setSuccess("");
     }
   };
 
@@ -96,7 +103,6 @@ function ProductForm() {
         <button type="submit" className="submit-button">Ajouter le produit</button>
       </form>
       {error && <p className="error-message">{error}</p>}
-      {success && <p className="success-message">{success}</p>}
     </div>
   );
 }

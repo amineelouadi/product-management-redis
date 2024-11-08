@@ -1,175 +1,234 @@
-/* General Styles */
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f7f8fc;
+/* Reset default styles */
+* {
   margin: 0;
   padding: 0;
-  color: #333;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
-h1 {
-  text-align: center;
-  color: #007bff;
-  margin-top: 30px;
-  font-size: 2rem;
-}
-
-/* Table Styles */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 30px;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-th, td {
-  padding: 15px;
-  text-align: left;
-}
-
-th {
-  background-color: #007bff;
-  color: white;
-  font-weight: bold;
-}
-
-td {
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #ddd;
-}
-
-tr:hover {
-  background-color: #f1f5f9;
-}
-
-/* Action Buttons */
-.actions {
+/* Main container */
+body {
+  background-color: #f4f6f9;
   display: flex;
-  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
-button {
-  background-color: #007bff;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-button:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-}
-
-button:disabled {
-  background-color: #ddd;
-  cursor: not-allowed;
-}
-
-/* Edit Form Styles */
-.edit-form {
-  margin-top: 40px;
-  padding: 20px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+/* Dashboard styles */
+.dashboard-container {
+  max-width: 1200px;
   width: 100%;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
+  padding: 20px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.edit-form h3 {
-  color: #007bff;
-  font-size: 1.5rem;
+/* Heading */
+h1 {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Error message */
+.error-message {
+  color: #e63946;
+  background-color: #ffe4e6;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
   margin-bottom: 20px;
 }
 
-.edit-form input, .edit-form textarea {
+/* Product Table */
+.table-container {
+  overflow-x: auto;
+}
+
+.product-table {
   width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.product-table th,
+.product-table td {
   padding: 12px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
+  text-align: left;
+  color: #555;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-.edit-form input:focus, .edit-form textarea:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
-.edit-form button {
-  background-color: #28a745;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 4px;
-  border: none;
-  width: 100%;
-  font-size: 1rem;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.edit-form button:hover {
-  background-color: #218838;
-  transform: scale(1.05);
-}
-
-/* Add Product Button */
-button.add-product {
-  background-color: #28a745;
-  display: block;
-  width: 200px;
-  margin: 30px auto;
-  padding: 12px 0;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-button.add-product:hover {
-  background-color: #218838;
-}
-
-button.add-product:disabled {
-  background-color: #ddd;
-}
-
-/* Error Message */
-.error-message {
-  color: red;
-  text-align: center;
-  font-size: 16px;
-  margin-top: 20px;
+.product-table th {
+  background-color: #009688;
+  color: #fff;
   font-weight: bold;
 }
 
-/* Responsive Design */
+.product-table td img {
+  border-radius: 5px;
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+}
+
+.product-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Actions */
+.actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.actions button:first-of-type {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+.actions button:last-of-type {
+  background-color: #e63946;
+  color: #fff;
+}
+
+.actions button:first-of-type:hover {
+  background-color: #45a049;
+}
+
+.actions button:last-of-type:hover {
+  background-color: #d62828;
+}
+
+/* Form styles */
+.edit-form,
+.add-form {
+  background-color: #fafafa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.edit-form h3 {
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.edit-form label {
+  display: block;
+  margin-bottom: 5px;
+  color: #777;
+  font-weight: bold;
+}
+
+.edit-form input,
+.edit-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.edit-form input[type="file"] {
+  padding: 0;
+}
+
+.edit-form img {
+  display: block;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.edit-form button[type="submit"],
+.edit-form button[type="button"] {
+  background-color: #009688;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  margin-right: 5px;
+}
+
+.edit-form button[type="button"] {
+  background-color: #757575;
+}
+
+.edit-form button[type="submit"]:hover {
+  background-color: #00796b;
+}
+
+.edit-form button[type="button"]:hover {
+  background-color: #616161;
+}
+
+/* Add Product Button */
+.add-product-button {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  padding: 12px;
+  background-color: #009688;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 20px auto 0;
+}
+
+.add-product-button:hover {
+  background-color: #00796b;
+}
+/* Bouton Ajouter un Produit */
+.add-product-button {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  padding: 12px;
+  background-color: #009688;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 20px auto 0;
+}
+
+.add-product-button:hover {
+  background-color: #00796b;
+}
+
+
+/* Responsive styling */
 @media (max-width: 768px) {
-  h1 {
-    font-size: 1.8rem;
-  }
-
-  table {
-    margin-top: 20px;
-  }
-
-  th, td {
+  .product-table th,
+  .product-table td {
     padding: 10px;
+    font-size: 0.9em;
   }
-
-  .edit-form input, .edit-form textarea {
-    font-size: 14px;
-  }
-
-  .edit-form button {
-    font-size: 1.1rem;
-  }
-
-  button.add-product {
-    width: 100%;
+  .edit-form,
+  .add-form {
+    padding: 15px;
   }
 }

@@ -1,0 +1,89 @@
+/* Global styles for the navbar */
+* {
+    box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
+}
+
+body {
+    margin: 0; /* Remove default margin */
+    font-family: 'Arial', sans-serif; /* Set a clean font for the body */
+}
+
+/* Navbar styles */
+.navbar {
+    background-color: #001f3f; /* Navy blue background */
+    padding: 15px 30px; /* Padding around the navbar */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Deeper shadow for depth */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+/* Container for the navbar items */
+.navbar-container {
+    max-width: 1200px; /* Maximum width for the navbar */
+    margin: 0 auto; /* Center the navbar */
+    display: flex; /* Flexbox for horizontal alignment */
+    justify-content: space-between; /* Space between items */
+    align-items: center; /* Center items vertically */
+}
+
+/* Logo styles (if applicable) */
+.navbar-logo {
+    font-size: 24px; /* Logo font size */
+    color: #ffffff; /* Logo color */
+    font-weight: bold; /* Bold font for the logo */
+    text-decoration: none; /* Remove underline */
+}
+
+/* Link styles */
+.navbar-link {
+    color: #ffffff; /* White text color */
+    text-decoration: none; /* Remove underline from links */
+    padding: 10px 20px; /* Padding around the link */
+    border-radius: 25px; /* Rounded corners for buttons */
+    transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Smooth transitions */
+    position: relative; /* Position for the pseudo-element */
+}
+
+/* Hover effect for links */
+.navbar-link:hover {
+    background-color: #007bff; /* Blue background on hover */
+    color: #ffffff; /* Keep text color white */
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+/* Active link styles */
+.navbar-link.active {
+    background-color: #0056b3; /* Darker blue for active link */
+    color: #ffffff; /* Keep text color white */
+}
+
+/* Pseudo-element for hover effect */
+.navbar-link::after {
+    content: '';
+    position: absolute; /* Position relative to the link */
+    left: 50%; /* Center it horizontally */
+    bottom: -5px; /* Position it slightly below the link */
+    width: 0; /* Initial width */
+    height: 2px; /* Height of the underline */
+    background-color: #007bff; /* Color of the underline */
+    transition: width 0.3s ease, left 0.3s ease; /* Smooth transition for width and position */
+}
+
+/* Show the underline on hover */
+.navbar-link:hover::after {
+    width: 100%; /* Full width on hover */
+    left: 0; /* Align to the left */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar-container {
+        flex-direction: column; /* Stack links vertically on small screens */
+        align-items: flex-start; /* Align items to the start */
+    }
+
+    .navbar-link {
+        width: 100%; /* Full width links */
+        text-align: left; /* Align text to the left */
+        margin: 5px 0; /* Margin between links */
+    }
+}

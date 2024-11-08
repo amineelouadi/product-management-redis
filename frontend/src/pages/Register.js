@@ -1,17 +1,34 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2"; // Importer SweetAlert
 import "./Register.css";
 
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate(); // Initialiser useNavigate
 
   const handleRegister = async () => {
     try {
       await axios.post("http://localhost:3001/register", { username, password });
-      alert("Inscription réussie !");
-    } catch {
-      alert("Erreur d'inscription");
+      
+      // Utiliser SweetAlert pour confirmation
+      Swal.fire({
+        title: "Inscription réussie !",
+        text: "Vous serez redirigé vers la page de connexion.",
+        icon: "success",
+        confirmButtonText: "OK",
+      }).then(() => {
+        navigate("/login"); // Rediriger vers /login après confirmation
+      });
+    } catch (error) {
+      Swal.fire({
+        title: "Erreur d'inscription",
+        text: "Veuillez vérifier vos informations et réessayer.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import "./Dashboard.css";
 
 function Dashboard() {
@@ -13,7 +14,7 @@ function Dashboard() {
     name: "",
     description: "",
     price: "",
-    image: null, // Add image to newProduct state
+    image: null,
   });
 
   useEffect(() => {
@@ -42,14 +43,18 @@ function Dashboard() {
     setEditProduct((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle image change for the edit form
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file && file instanceof File) {
-      setEditProduct((prev) => ({ ...prev, image: file }));
-    } else {
-      setEditProduct((prev) => ({ ...prev, image: null }));
+    setEditProduct((prev) => ({ ...prev, image: file }));
+  };
+
+  const getImagePreview = () => {
+    if (editProduct && editProduct.image instanceof File) {
+      return URL.createObjectURL(editProduct.image);
+    } else if (editProduct && editProduct.imageUrl) {
+      return editProduct.imageUrl;
     }
+    return null;
   };
 
   const handleCreateProduct = async (e) => {
@@ -81,65 +86,67 @@ function Dashboard() {
   const handleEditProduct = async (e) => {
     e.preventDefault();
     
-    console.log("Edit product:", editProduct); // Debugging the data being sent
-    
     const formData = new FormData();
     formData.append("name", editProduct.name);
     formData.append("description", editProduct.description);
     formData.append("price", editProduct.price);
     if (editProduct.image) formData.append("image", editProduct.image);
-  
+
     try {
       const response = await axios.put(`http://localhost:3001/products/${editProduct.name}`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "multipart/form-data", // Ensure the content type is set for file upload
+          "Content-Type": "multipart/form-data",
         },
       });
-      console.log("Response:", response); // Log the server response for debugging
-      
-      // Update product list and reset edit state
+
       setEditProduct(null);
       setLoading(true);
       const updatedProducts = await axios.get("http://localhost:3001/products", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-      setProducts(updatedProducts.data); // Set the updated list of products
+      setProducts(updatedProducts.data);
+      
+      Swal.fire({
+        title: "Modification réussie",
+        text: "Le produit a été modifié avec succès.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
     } catch (err) {
-      console.error("Error updating product:", err.response ? err.response.data : err.message);
       setError("Erreur lors de la mise à jour du produit");
     }
   };
-  
-  
 
   const handleDeleteProduct = async (name) => {
-    try {
-      await axios.delete(`http://localhost:3001/products/${name}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      setLoading(true);
-      const response = await axios.get("http://localhost:3001/products", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      setProducts(response.data);
-    } catch (err) {
-      setError("Erreur lors de la suppression du produit");
-    }
+    Swal.fire({
+      title: "Êtes-vous sûr?",
+      text: "Cette action supprimera définitivement le produit!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Oui, supprimer",
+      cancelButtonText: "Non, annuler",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`http://localhost:3001/products/${name}`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          });
+          setLoading(true);
+          const response = await axios.get("http://localhost:3001/products", {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          });
+          setProducts(response.data);
+          Swal.fire("Supprimé!", "Le produit a été supprimé avec succès.", "success");
+        } catch (err) {
+          setError("Erreur lors de la suppression du produit");
+        }
+      }
+    });
   };
 
   const handleGoToAddProduct = () => {
     navigate("/add-product");
-  };
-
-  // Check if the image is a file or a URL
-  const getImagePreview = (image) => {
-    if (image instanceof File) {
-      return URL.createObjectURL(image); // If the image is a File, create an object URL
-    } else if (image) {
-      return image; // If the image is a URL, use it directly
-    }
-    return null; // No image available
   };
 
   return (
@@ -233,7 +240,7 @@ function Dashboard() {
                   {editProduct.image && (
                     <div>
                       <img
-                        src={getImagePreview(editProduct.image)} // Use the helper function for preview
+                        src={getImagePreview()}
                         alt="preview"
                         style={{ width: "100px", height: "100px", objectFit: "cover" }}
                       />
@@ -241,13 +248,16 @@ function Dashboard() {
                   )}
                 </div>
                 <button type="submit">Mettre à jour le produit</button>
+                <button type="button" onClick={() => setEditProduct(null)}>
+                  Annuler
+                </button>
               </form>
             </div>
           )}
         </div>
       )}
 
-      <button onClick={handleGoToAddProduct}>Ajouter un produit</button>
+      <button className="add-product-button" onClick={handleGoToAddProduct}>Ajouter un produit</button>
     </div>
   );
 }

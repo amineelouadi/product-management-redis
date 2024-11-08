@@ -12,7 +12,6 @@ function Login() {
     try {
       const response = await axios.post("http://localhost:3001/login", { username, password });
       localStorage.setItem("token", response.data.token); // Store token in local storage
-      alert("Connexion réussie !");
       navigate("/dashboard"); // Redirect to Dashboard
     } catch {
       alert("Erreur de connexion");
