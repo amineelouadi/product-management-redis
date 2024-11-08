@@ -3,29 +3,55 @@ if (!client.isOpen) {
   client.connect();
 }
 
+const multer = require("multer");
+const path = require("path");
+
+// Configure multer to store uploaded images in a "uploads" directory
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Ensure unique filenames
+  },
+});
+
+// Filter to allow only images
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image/")) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only images are allowed!"), false);
+  }
+};
+
+const upload = multer({ storage, fileFilter });
+
+module.exports.upload = upload;
+
+
 // Fonction pour créer un produit
 exports.createProduct = async (req, res) => {
   const { name, description, price } = req.body;
+  
+  const image = req.file ? req.file.filename : null; // Get the uploaded image filename
 
-  // Basic validation
-  if (!name || !description || !price) {
-    return res.status(400).json({ message: "Tous les champs doivent être remplis" });
+  if (!name || !description || !price || !image) {
+    return res.status(400).json({ message: "Tous les champs doivent être remplis, y compris l'image." });
   }
 
-  // Ensure price is a valid number and greater than 0
   if (isNaN(price) || price <= 0) {
     return res.status(400).json({ message: "Le prix doit être un nombre positif" });
   }
 
   try {
-    // Hash the name to ensure uniqueness in the Redis key
     const productKey = `product:${name}`;
 
-    // Store product data in Redis under the key product:${name}
     await client.hSet(productKey, {
       name,
       description,
-      price: price.toString(), // Convert price to string to store it in Redis
+      price: price.toString(),
+      image, // Save image filename to Redis
     });
 
     res.status(201).json({ message: "Produit ajouté avec succès" });
@@ -36,22 +62,20 @@ exports.createProduct = async (req, res) => {
 };
 
 // Fonction pour récupérer tous les produits
+// Function to fetch all products
 exports.getProducts = async (req, res) => {
   try {
-    
-    // Récupérer les clés des produits
     const keys = await client.keys("product:*");
 
-    // Si aucun produit n'est trouvé
     if (keys.length === 0) {
       return res.status(404).json({ message: "Aucun produit trouvé" });
     }
 
-    // Utilisation de Promise.all pour récupérer les détails de chaque produit
     const productPromises = keys.map((key) =>
       client.hGetAll(key).then((product) => ({
-        id: key.split(":")[1], // Extraire l'ID à partir de la clé Redis
+        id: key.split(":")[1], // Extract the ID from the Redis key
         ...product,
+        imageUrl: product.image ? `http://localhost:3001/uploads/${product.image}` : null, // Add the full image URL
       }))
     );
 
@@ -62,6 +86,7 @@ exports.getProducts = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
+
 
 // Fonction pour récupérer un produit par son nom
 exports.getProductByName = async (req, res) => {
@@ -84,39 +109,53 @@ exports.getProductByName = async (req, res) => {
   }
 };
 
-// Fonction pour mettre à jour un produit
-exports.updateProduct = async (req, res) => {
-  const { name } = req.params;
-  const { description, price } = req.body;
 
-  if (!description && !price) {
-    return res.status(400).json({ message: "Aucune donnée à mettre à jour" });
-  }
+// Function to update a product
+// Update product function
+exports.updateProduct = [
+  upload.single("image"), // Use multer to handle image upload
+  async (req, res) => {
+    const { name } = req.params;
+    const { description, price } = req.body;
+    const image = req.file ? req.file.filename : null; // Get the uploaded image filename if available
 
-  try {
-    const productKey = `product:${name}`;
-    
-    // Vérifier si le produit existe
-    const existingProduct = await client.hGetAll(productKey);
-
-    if (Object.keys(existingProduct).length === 0) {
-      return res.status(404).json({ message: "Produit non trouvé" });
+    if (!description && !price && !image) {
+      return res.status(400).json({ message: "No updates to apply." });
     }
 
-    // Update product fields if provided
-    const updatedProduct = {};
-    if (description) updatedProduct.description = description;
-    if (price) updatedProduct.price = price.toString(); // Ensure price is stored as a string
+    try {
+      const productKey = `product:${name}`;
+      const product = await client.hGetAll(productKey);
 
-    // Update the product in Redis
-    await client.hSet(productKey, updatedProduct);
+      if (Object.keys(product).length === 0) {
+        return res.status(404).json({ message: "Product not found" });
+      }
 
-    res.status(200).json({ message: "Produit mis à jour avec succès" });
-  } catch (err) {
-    console.error("Error updating product:", err);
-    res.status(500).json({ message: "Erreur serveur", error: err.message });
-  }
-};
+      // Update product fields
+      if (description) product.description = description;
+      if (price) product.price = price;
+
+      // If a new image is uploaded, update the image
+      if (image) {
+        product.image = image; // Save image filename in Redis
+      }
+
+      // Save updated product in Redis
+      await client.hSet(productKey, product);
+
+      // Include full image URL in response
+      product.imageUrl = image ? `http://localhost:3001/uploads/${image}` : product.imageUrl;
+
+      return res.status(200).json({ message: "Product updated successfully", product });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error updating product", error: error.message });
+    }
+  },
+];
+
+
+
 
 // Fonction pour supprimer un produit
 exports.deleteProduct = async (req, res) => {
